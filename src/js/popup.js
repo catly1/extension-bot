@@ -46,7 +46,7 @@ const initPopupScript = () => {
         // Set up the message listener
         port.onMessage.addListener(messageHandler);
         // Send a test message to in-content.js
-        sendPortMessage('Message from popup!');
+        sendPortMessage(tab.url);
     });
 };
 
