@@ -18,6 +18,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log('background.js - received message from in-content.js:', message);
     // Respond message
     sendResponse('👍');
+
+    chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
+        chrome.declarativeContent.onPageChanged.addRules([{
+            conditions: [
+                new chrome.declarativeContent.PageStateMatcher({
+                    pageUrl: { hostEquals: 'game.granbluefantasy.jp' }
+                }),
+            ],
+            actions: [new chrome.declarativeContent.ShowPageAction()]
+        }]);
+    });
 });
 
 // Make variables accessible from chrome.extension.getBackgroundPage()
