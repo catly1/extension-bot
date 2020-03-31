@@ -26,6 +26,7 @@ chrome.extension.onConnect.addListener(popupPort => {
     port = popupPort;
     // Perform any logic or set listeners
     sendPortMessage('message from in-content.js');
+    chrome.runtime.sendMessage('Message from in-content.js!');
 });
 
 // Response handler for short lived messages
