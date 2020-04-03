@@ -19,12 +19,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // Respond message
 
     console.log(message)
-    // if (message.action == "start") {
+    if (message.action == "start") {
+        console.log("got here")
+    }
+    else if (message.action == "stop") {
 
-    // }
-    // else if (message.action == "stop") {
-
-    // }
+    }
 
     sendResponse('👍');
 });
