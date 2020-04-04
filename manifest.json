@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "chrome-extension-template",
-    "version": "0.0.1",
+    "version": "1.0",
     "description": "Chrome extension boilerplate, replace all values!",
     "icons": {
         "16": "16x16.png",
@@ -9,8 +9,7 @@
         "128": "128x128.png"
     },
     "browser_action": {
-        "default_title": "Boilerplate popup!",
-        "default_popup": "popup.html"
+        "default_title": "test"
     },
     "content_scripts": [
         {
@@ -19,11 +18,7 @@
         }
     ],
     "background": {
-        "scripts": ["background.js"],
-        "persistent": true
+        "scripts": ["background.js"]
     },
-    "content_security_policy":
-        "script-src 'self' 'unsafe-eval'; object-src 'self'; img-src * data: 'self' 'unsafe-eval'",
-    "offline_enabled": true,
     "permissions": ["tabs", "<all_urls>", "activeTab"]
 }
