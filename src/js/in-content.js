@@ -1,4 +1,4 @@
-const re = new RegExp('option', 'gi')
+const re = new RegExp('skill', 'gi')
 const matches = document.documentElement.innerHTML.match(re) || []
 
 chrome.runtime.sendMessage({

@@ -1,5 +1,5 @@
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
 
     let btnStart = document.getElementById('start-button');
     let btnStop = document.getElementById('stop-button');
@@ -7,10 +7,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     btnStart.onclick = (element) => {
         lblStatus.innerHTML = "Started";
+        chrome.runtime.sendMessage({ action: "start" });
     }
 
     btnStop.onclick = (element) => {
         lblStatus.innerHTML = "Stopped";
+        chrome.runtime.sendMessage({ action: "stop" });
     }
 
     const bg = chrome.extension.getBackgroundPage()
