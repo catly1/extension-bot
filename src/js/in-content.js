@@ -1,7 +1,6 @@
 const re = new RegExp('skill', 'gi')
 const matches = document.documentElement.innerHTML.match(re) || []
 const firstLink = document.querySelector("a")
-console.log(firstLink);
 
 chrome.runtime.sendMessage({
     url: window.location.href,
