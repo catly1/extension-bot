@@ -24,5 +24,5 @@ const startAutomation = (request)=>{
 }
 
 const stopAutomation = () => {
-    console.log("got to stopping automation function")
+ 
 }
