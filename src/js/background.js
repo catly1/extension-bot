@@ -1,6 +1,6 @@
 window.test = {}
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    window.test[request.url] = request.firstLink;
+    window.test[request.url] = request.firstLink.innerHTML;
 
     if (request.action == "start") {
         startAutomation(request);
