@@ -2,23 +2,25 @@ window.test = {}
 let running = false;
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    window.test[request.url] = request.firstLink;
+    window.test[request.url] = request.firstLink.x;
 
     if (request.action == "start") {
         running = true;
-        startAutomation(request);
+        startAutomation(request, sendResponse);
     }
     else if (request.action == "stop") {
         stopAutomation();
     }
+
 })
 
 chrome.browserAction.onClicked.addListener((tab) => {
     chrome.tabs.create({ url: 'popup.html' })
 })
 
-const startAutomation = (request)=>{
-    if (request.firstLink) document.elementFromPoint(request.firstLink.x, request.firstLink.y);
+const startAutomation = (request, sendResponse)=>{
+    if (request.firstLink) sendResponse(request.firstLink)
+        // document.elementFromPoint(request.firstLink.x, request.firstLink.y).click();
     if (window.test.start) {
         window.test.start += 1;
     } else {

@@ -6,4 +6,7 @@ chrome.runtime.sendMessage({
     url: window.location.href,
     count: matches.length,
     firstLink: firstLink
+}, response => {
+    console.log("Response: ", response)
 })
+
