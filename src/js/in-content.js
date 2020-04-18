@@ -1,6 +1,7 @@
 const re = new RegExp('skill', 'gi')
 const matches = document.documentElement.innerHTML.match(re) || []
 const firstLink = document.getElementById("rso").firstElementChild.getBoundingClientRect();
+const bg = chrome.extension.getBackgroundPage()
 
 chrome.runtime.sendMessage({
     url: window.location.href,
