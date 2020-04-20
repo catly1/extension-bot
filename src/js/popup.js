@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnStart.onclick = (element) => {
         lblStatus.innerHTML = "Started";
+        chrome.storage.local.set({ "on": true }, () =>{
+            console.log("added in local api")
+        });
         chrome.runtime.sendMessage({ action: "start" });
     }
 
@@ -15,11 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.runtime.sendMessage({ action: "stop" });
     }
 
-    const bg = chrome.extension.getBackgroundPage()
-    Object.keys(bg.test).forEach((url) => {
-        const div = document.createElement('div')
-        div.textContent = `${url}: ${bg.test[url]}`
-        document.body.appendChild(div)
-    })
+    // const bg = chrome.extension.getBackgroundPage()
+    // Object.keys(bg.test).forEach((url) => {
+    //     const div = document.createElement('div')
+    //     div.textContent = `${url}: ${bg.test[url]}`
+    //     document.body.appendChild(div)
+    // })
 
 }, false)
