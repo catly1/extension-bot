@@ -17,6 +17,10 @@ chrome.storage.local.get("on", data => {
     on = data.on;
 })
 
+setInterval(()=>{
+    console.log("test")
+},1000)
+
 if (on){
     document.elementFromPoint(firstLink.x,firstLink.y).click();
 }
