@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnStop.onclick = (element) => {
         lblStatus.innerHTML = "Stopped";
+        chrome.storage.local.set({ "on": false }, () => {
+            console.log("added in local api")
+        });
         chrome.runtime.sendMessage({ action: "stop" });
     }
 

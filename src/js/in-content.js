@@ -2,7 +2,7 @@ const re = new RegExp('skill', 'gi');
 const matches = document.documentElement.innerHTML.match(re) || [];
 const firstLink = document.getElementById("rso").firstElementChild.getBoundingClientRect();
 // const bg = chrome.extension.getBackgroundPage();
-let on = false;
+let on;
 // chrome.runtime.sendMessage({
 //     url: window.location.href,
 //     count: matches.length,
@@ -10,17 +10,18 @@ let on = false;
 // }, response => {
 //     console.log("Response: ", response)
 // })
-console.log("content loaded");
-console.log(firstLink);
-chrome.storage.local.get("on", data => {
-    console.log(data)
-    on = data.on;
-})
+
 
 setInterval(()=>{
-    console.log("test")
+    chrome.storage.local.get("on", data => {
+        on = data.on;
+    })
+
+    if (on) {
+        console.log("It's on")
+        // document.elementFromPoint(firstLink.x, firstLink.y).click();
+    }
+
+    
 },1000)
 
-if (on){
-    document.elementFromPoint(firstLink.x,firstLink.y).click();
-}
