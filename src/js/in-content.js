@@ -1,6 +1,7 @@
 const re = new RegExp('skill', 'gi');
 const matches = document.documentElement.innerHTML.match(re) || [];
 const firstLink = document.getElementById("rso").firstElementChild.getBoundingClientRect;
+const queue = [];
 // const bg = chrome.extension.getBackgroundPage();
 let on;
 // chrome.runtime.sendMessage({
@@ -11,8 +12,24 @@ let on;
 //     console.log("Response: ", response)
 // })
 
+// mainInterval()
+setInterval(getStatus,1000)
 
-setInterval(()=>{
+let i = 0
+// function mainInterval(){
+//     console.log(i + 1);
+//     // mainInterval();
+// }
+
+const mainInterval = () => new Promise (resolve =>{
+    console.log(i + 1);
+    resolve();
+})
+
+const loop = mainInterval().then(loop);
+
+loop();
+function getStatus(){
     chrome.storage.local.get("on", data => {
         on = data.on;
     })
@@ -20,14 +37,16 @@ setInterval(()=>{
     if (on) {
         console.log("It's on")
         // sleep(5000);
-        tap(firstLink);
+        // tap(firstLink);
     }
-
-    
-},1000)
+}
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function action(){
+
 }
 
 function tap(element) {
