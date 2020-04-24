@@ -21,12 +21,12 @@ let i = 0
 //     // mainInterval();
 // }
 
-const mainInterval = () => new Promise (resolve =>{
+const questMode = () => new Promise (resolve =>{
     console.log(i + 1);
     resolve();
 })
 
-const loop = mainInterval().then(loop);
+
 
 loop();
 function getStatus(){
