@@ -21,10 +21,10 @@ let i = 0
 //     // mainInterval();
 // }
 
-const questMode = () => new Promise (resolve =>{
-    console.log(i + 1);
-    resolve();
-})
+// const questMode = () => new Promise (resolve =>{
+//     console.log(i + 1);
+//     resolve();
+// })
 
 
 
@@ -45,9 +45,12 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function action(){
-
-}
+// function action(){
+//     i += 1
+//     console.log(i)
+//     action();
+// }
+// action();
 
 function tap(element) {
     let evt1 = document.createEvent('MouseEvents');
