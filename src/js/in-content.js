@@ -14,21 +14,27 @@ let on;
 
 // mainInterval()
 setInterval(getStatus,1000)
+mainInterval();
 
 let i = 0
-// function mainInterval(){
-//     console.log(i + 1);
-//     // mainInterval();
-// }
+
+
+
 
 // const questMode = () => new Promise (resolve =>{
 //     console.log(i + 1);
 //     resolve();
 // })
 
+function mainInterval() {
 
+    setTimeout(() => {
+        i += 1
+        console.log(i);
+        mainInterval();
+    }, 1500)
+}
 
-loop();
 function getStatus(){
     chrome.storage.local.get("on", data => {
         on = data.on;
