@@ -13,7 +13,7 @@ let on;
 // })
 
 // mainInterval()
-setInterval(getStatus,1000)
+setInterval(getStatus, 1500)
 mainInterval();
 
 let i = 0
@@ -27,7 +27,6 @@ let i = 0
 // })
 
 function mainInterval() {
-
     setTimeout(() => {
         i += 1
         console.log(i);
@@ -41,7 +40,7 @@ function getStatus(){
     })
 
     if (on) {
-        console.log("It's on")
+        console.log("in interval: " + i)
         // sleep(5000);
         // tap(firstLink);
     }
