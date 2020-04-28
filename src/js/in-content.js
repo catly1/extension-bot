@@ -28,7 +28,15 @@ let i = 0
 
 function mainInterval() {
     setTimeout(() => {
+        
         i += 1
+
+        if (on) {
+            console.log("in main, interval: " + i)
+            // sleep(5000);
+            // tap(firstLink);
+        }
+
         console.log(i);
         mainInterval();
     }, 1500)
@@ -38,12 +46,6 @@ function getStatus(){
     chrome.storage.local.get("on", data => {
         on = data.on;
     })
-
-    if (on) {
-        console.log("in interval: " + i)
-        // sleep(5000);
-        // tap(firstLink);
-    }
 }
 
 function sleep(ms) {
