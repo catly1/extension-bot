@@ -1,9 +1,13 @@
 const re = new RegExp('skill', 'gi');
 const matches = document.documentElement.innerHTML.match(re) || [];
-const firstLink = document.getElementById("rso").firstElementChild.getBoundingClientRect;
-const queue = [];
+// const firstLink = document.getElementById("rso").firstElementChild;
+// const queue = [firstLink];
+const clicks = [];
+// document.onmousedown = e => {
+//     clicks.push([e.clientX, e.clientY, e.timeStamp]);
+// }
 // const bg = chrome.extension.getBackgroundPage();
-let on;
+let status;
 // chrome.runtime.sendMessage({
 //     url: window.location.href,
 //     count: matches.length,
@@ -18,7 +22,18 @@ mainInterval();
 
 let i = 0
 
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    
 
+    if (request.action == "start") {
+        running = true;
+        startAutomation(request, sendResponse);
+    }
+    else if (request.action == "stop") {
+        stopAutomation();
+    }
+
+})
 
 
 // const questMode = () => new Promise (resolve =>{
@@ -27,24 +42,36 @@ let i = 0
 // })
 
 function mainInterval() {
-    setTimeout(() => {
-        
-        i += 1
+    // console.log(status)
 
-        if (on) {
-            console.log("in main, interval: " + i)
-            // sleep(5000);
-            // tap(firstLink);
+    setTimeout(() => {
+
+        switch (status) {
+            case status = "record":
+                document.onmousedown = e => {
+                    clicks.push([e.clientX, e.clientY, e.timeStamp]);
+                    console.log(clicks);
+                }
+                break;
+            case status = "play":
+                if (clicks.length > 0) {
+                    let action = clicks.pop();
+                    tap(action);
+                }
+            case status = "stop":
+                break;
+            default:
         }
 
-        console.log(i);
+        // console.log(i);
         mainInterval();
-    }, 1500)
+    }, 1000)
 }
 
 function getStatus(){
-    chrome.storage.local.get("on", data => {
-        on = data.on;
+    chrome.storage.local.get("status", data => {
+        console.log(data.status)
+        status = data.status;
     })
 }
 
@@ -59,14 +86,20 @@ function sleep(ms) {
 // }
 // action();
 
-function tap(element) {
-    let evt1 = document.createEvent('MouseEvents');
-    evt1.initMouseEvent('mousedown', true, false);
-    let evt2 = document.createEvent('MouseEvents');
-    evt2.initMouseEvent('mouseup', true, false);
+function tap([x, y, timeStamp]) {
+    let element = document.elementFromPoint(x,y)
 
-    element.dispatchEvent(evt1);
-    setTimeout(() =>{
-        element.dispatchEvent(evt2);
-    }, Math.round(Math.random() * 42) + 38)
+    if (element){
+        let evt1 = document.createEvent('MouseEvents');
+        evt1.initMouseEvent('mousedown', true, false);
+        let evt2 = document.createEvent('MouseEvents');
+        evt2.initMouseEvent('mouseup', true, false);
+
+        element.dispatchEvent(evt1);
+        setTimeout(() => {
+            element.dispatchEvent(evt2);
+        }, Math.round(Math.random() * 42) + 38)
+    }
+
+    sleep(timeStamp);
 }
