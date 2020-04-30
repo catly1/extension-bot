@@ -11,7 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.local.set({ "status": "record" }, () => {
             console.log("added in local api")
         });
-        chrome.runtime.sendMessage({ action: "start" });
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, "record");
+        })
     }
 
     btnStart.onclick = (element) => {
@@ -19,7 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.local.set({ "status": "play" }, () =>{
             console.log("added in local api")
         });
-        chrome.runtime.sendMessage({ action: "start" });
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, "play");
+        });
     }
 
     btnStop.onclick = (element) => {
@@ -27,7 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.local.set({ "status": "stop" }, () => {
             console.log("added in local api")
         });
-        chrome.runtime.sendMessage({ action: "stop" });
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, "stop");
+        })
     }
 
     // const bg = chrome.extension.getBackgroundPage()

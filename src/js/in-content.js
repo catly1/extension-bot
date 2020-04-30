@@ -15,25 +15,32 @@ let status;
 // }, response => {
 //     console.log("Response: ", response)
 // })
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
-// mainInterval()
-setInterval(getStatus, 1500)
-mainInterval();
-
-let i = 0
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    
-
-    if (request.action == "start") {
-        running = true;
-        startAutomation(request, sendResponse);
-    }
-    else if (request.action == "stop") {
-        stopAutomation();
+    switch (message) {
+        case status = "record":
+            console.log(message)
+            console.log(sender)
+            break;
+        case status = "play":
+            console.log(message)
+            console.log(sender)
+            break;
+        case status = "stop":
+            console.log(message)
+            console.log(sender)
+            break;
+        default:
     }
 
 })
+
+// mainInterval()
+// setInterval(getStatus, 1500)
+// mainInterval();
+
+let i = 0
+
 
 
 // const questMode = () => new Promise (resolve =>{
