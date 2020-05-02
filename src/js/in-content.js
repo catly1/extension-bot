@@ -19,8 +19,8 @@ let status;
 
 getStatus();
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-
-    switch (message) {
+    console.log(message)
+    switch (message.status) {
         case "record":
             chrome.storage.local.set({ "status": "recording" });
             handleRecoding();  
@@ -108,6 +108,7 @@ function mainInterval() {
 function getStatus(){
     chrome.storage.local.get("status", data => {
         status = data.status;
+        console.log(status)
         if (status == "recording") handleRecoding()
     })
 
