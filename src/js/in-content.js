@@ -31,8 +31,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 , response => {
                     console.log(response)
                 })
-            console.log(message)
-            console.log(sender)
             break;
         case "stop":
             chrome.storage.local.set({ "status": "stopped" });
@@ -126,6 +124,10 @@ function getStatus(){
     chrome.storage.local.get("status", data => {
         status = data.status;
         if (status == "recording") handleRecoding()
+    })
+
+    chrome.storage.local.get("recordings", data => {
+        console.log(data);
     })
 }
 

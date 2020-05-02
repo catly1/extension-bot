@@ -36,6 +36,17 @@ document.addEventListener('DOMContentLoaded', () => {
             chrome.tabs.sendMessage(tabId, "stop");
         }
 
+
+        chrome.storage.local.get("recordings", data => {
+            let list = data.recordings
+            list.forEach(recordingData => {
+                let li = document.createElement("LI");
+                let text = document.createTextNode(recordingData.date);
+                li.appendChild(text);
+                recordList.appendChild(li);
+            })
+        })
+
         // const bg = chrome.extension.getBackgroundPage()
         // Object.keys(bg.test).forEach((url) => {
         //     const div = document.createElement('div')

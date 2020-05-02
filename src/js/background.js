@@ -11,19 +11,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             status = "recording";
             recordings.push(message.action)
             sendResponse(recordings)
-            console.log(message)
-            console.log(sender)
             break;
         case "play":
             sendResponse("Got from backround play")
-            console.log(message)
-            console.log(sender)
             break;
         case "stop":
             status = "stopped"
-            console.log(message)
-            sendResponse("Got from backround stop")
-            console.log(sender)
+            sendResponse(buildRecordingData())
             break;
         default:
     }
@@ -54,13 +48,20 @@ function buildRecordingData() {
     let recordingData = {};
     recordingData["date"] = (new Date()).getUTCDate();
     recordingData["idx"] = 0;
-    recordingData["steps"] = record();
-    chrome.storage.get("recordings", data => {
+    recordingData["steps"] = recordings;
+    chrome.storage.local.get("recordings", data => {
         console.log(data)
-        oldRecordings = data.recordings
+        if (data.recordings){
+            oldRecordings = data.recordings
+        } else {
+            oldRecordings = []
+        }
+        oldRecordings.push(recordingData)
+        chrome.storage.local.set({
+            "recordings": oldRecordings
+        },()=>{
+            recordings = [];
+        });
     })
-    oldRecordings.push(recordingData)
-    chrome.storage.local.set({
-        "recordings": oldRecordings
-    });
+    return recordingData;
 }
