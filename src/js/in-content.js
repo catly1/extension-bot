@@ -19,14 +19,29 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     switch (message) {
         case status = "record":
+            chrome.runtime.sendMessage(
+                {status: "record"}
+            , response => {
+                console.log(response)
+            })
             console.log(message)
             console.log(sender)
             break;
         case status = "play":
+            chrome.runtime.sendMessage(
+                { status: "play" }
+                , response => {
+                    console.log(response)
+                })
             console.log(message)
             console.log(sender)
             break;
         case status = "stop":
+            chrome.runtime.sendMessage(
+                { status: "stop" }
+                , response => {
+                    console.log(response)
+                })
             console.log(message)
             console.log(sender)
             break;
@@ -73,6 +88,22 @@ function mainInterval() {
         // console.log(i);
         mainInterval();
     }, 1000)
+}
+
+function buildRecordingData(){
+    let oldRecordings = [];
+    let recordingData = {};
+    recordingData["date"] = (new Date()).getUTCDate();
+    recordingData["idx"] = 0;
+    recordingData["steps"] = record();
+    chrome.storage.get("recordings", data => {
+        console.log(data)
+        oldRecordings = data.recordings
+    })
+    oldRecordings.push(recordingData)
+    chrome.storage.local.set({ 
+        "recordings": oldRecordings
+         });
 }
 
 function getStatus(){

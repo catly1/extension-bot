@@ -1,17 +1,27 @@
 window.test = {}
 let running = false;
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    window.test[request.url] = request.firstLink.x;
-
-    if (request.action == "start") {
-        running = true;
-        startAutomation(request, sendResponse);
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    switch (message) {
+        case status = "record":
+            sendResponse("Got from backround record")
+            console.log(message)
+            console.log(sender)
+            break;
+        case status = "play":
+            sendResponse("Got from backround play")
+            console.log(message)
+            console.log(sender)
+            break;
+        case status = "stop":
+            console.log(message)
+            sendResponse("Got from backround stop")
+            console.log(sender)
+            break;
+        default:
     }
-    else if (request.action == "stop") {
-        stopAutomation();
-    }
 
+    sendResponse(message)
 })
 
 chrome.browserAction.onClicked.addListener((tab) => {
@@ -30,4 +40,20 @@ const startAutomation = (request, sendResponse)=>{
 
 const stopAutomation = () => {
  
+}
+
+function buildRecordingData() {
+    let oldRecordings = [];
+    let recordingData = {};
+    recordingData["date"] = (new Date()).getUTCDate();
+    recordingData["idx"] = 0;
+    recordingData["steps"] = record();
+    chrome.storage.get("recordings", data => {
+        console.log(data)
+        oldRecordings = data.recordings
+    })
+    oldRecordings.push(recordingData)
+    chrome.storage.local.set({
+        "recordings": oldRecordings
+    });
 }

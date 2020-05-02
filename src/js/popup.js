@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let btnStart = document.getElementById('start-button');
     let btnStop = document.getElementById('stop-button');
     let lblStatus = document.getElementById('status-label');
-    
+    let recordList = document.getElementById('recordings')
+
     btnRecord.onclick = (element) => {
         lblStatus.innerHTML = "Record";
         chrome.storage.local.set({ "status": "record" }, () => {
