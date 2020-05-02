@@ -6,7 +6,7 @@ const clicks = [];
 document.onmousedown = e => {
     clicks.push([e.clientX, e.clientY, e.timeStamp]);
 }
-// const bg = chrome.extension.getBackgroundPage();
+// const bg = chrome.runtime.getBackgroundPage();
 let status;
 // chrome.runtime.sendMessage({
 //     url: window.location.href,
@@ -15,22 +15,15 @@ let status;
 // }, response => {
 //     console.log("Response: ", response)
 // })
+
+
+getStatus();
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     switch (message) {
         case "record":
-            document.onmousedown = e => {
-                chrome.runtime.sendMessage(
-                    { 
-                    status: "record",
-                    action: [e.clientX, e.clientY, e.timeStamp] 
-                    }
-                , response => {
-                    console.log(response)
-                })
-            }  
-            console.log(message)
-            console.log(sender)
+            chrome.storage.local.set({ "status": "recording" });
+            handleRecoding();  
             break;
         case "play":
             chrome.runtime.sendMessage(
@@ -42,19 +35,37 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             console.log(sender)
             break;
         case "stop":
-            chrome.runtime.sendMessage(
-                { status: "stop" }
-                , response => {
-                    console.log(response)
-                })
-            console.log(message)
-            console.log(sender)
+            chrome.storage.local.set({ "status": "stopped" });
+            handleStop();
             break;
         default:
     }
 
 })
 
+function handleStop(){
+    document.onmousedown = e => { };
+    chrome.runtime.sendMessage(
+        { status: "stop" }
+        , response => {
+            console.log(response)
+        })
+}
+
+function handleRecoding(){
+    console.log(status);
+    console.log("got here")
+    document.onmousedown = e => {
+        chrome.runtime.sendMessage(
+            {
+                status: "record",
+                action: [e.clientX, e.clientY, e.timeStamp]
+            }
+            , response => {
+                console.log(response)
+            })
+    }  
+}
 // mainInterval()
 // setInterval(getStatus, 1500)
 // mainInterval();
@@ -113,8 +124,8 @@ function buildRecordingData(){
 
 function getStatus(){
     chrome.storage.local.get("status", data => {
-        console.log(data.status)
         status = data.status;
+        if (status == "recording") handleRecoding()
     })
 }
 

@@ -1,14 +1,16 @@
 window.test = {}
 let running = false;
-let recording = [];
+let recordings = [];
+let status = false;
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     
     switch (message.status) {
         case "record":
-            recording.push(message.action)
-            sendResponse(recording)
+            status = "recording";
+            recordings.push(message.action)
+            sendResponse(recordings)
             console.log(message)
             console.log(sender)
             break;
@@ -18,6 +20,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             console.log(sender)
             break;
         case "stop":
+            status = "stopped"
             console.log(message)
             sendResponse("Got from backround stop")
             console.log(sender)
