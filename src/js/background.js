@@ -46,7 +46,7 @@ const stopAutomation = () => {
 function buildRecordingData() {
     let oldRecordings = [];
     let recordingData = {};
-    recordingData["date"] = (new Date()).getUTCDate();
+    recordingData["date"] = new Date().getTime();
     recordingData["idx"] = 0;
     recordingData["steps"] = recordings;
     chrome.storage.local.get("recordings", data => {

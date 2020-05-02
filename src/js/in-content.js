@@ -104,21 +104,6 @@ function mainInterval() {
     }, 1000)
 }
 
-function buildRecordingData(){
-    let oldRecordings = [];
-    let recordingData = {};
-    recordingData["date"] = (new Date()).getUTCDate();
-    recordingData["idx"] = 0;
-    recordingData["steps"] = record();
-    chrome.storage.get("recordings", data => {
-        console.log(data)
-        oldRecordings = data.recordings
-    })
-    oldRecordings.push(recordingData)
-    chrome.storage.local.set({ 
-        "recordings": oldRecordings
-         });
-}
 
 function getStatus(){
     chrome.storage.local.get("status", data => {
