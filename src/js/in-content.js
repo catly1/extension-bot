@@ -3,9 +3,9 @@ const matches = document.documentElement.innerHTML.match(re) || [];
 // const firstLink = document.getElementById("rso").firstElementChild;
 // const queue = [firstLink];
 const clicks = [];
-// document.onmousedown = e => {
-//     clicks.push([e.clientX, e.clientY, e.timeStamp]);
-// }
+document.onmousedown = e => {
+    clicks.push([e.clientX, e.clientY, e.timeStamp]);
+}
 // const bg = chrome.extension.getBackgroundPage();
 let status;
 // chrome.runtime.sendMessage({
@@ -18,16 +18,21 @@ let status;
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     switch (message) {
-        case status = "record":
-            chrome.runtime.sendMessage(
-                {status: "record"}
-            , response => {
-                console.log(response)
-            })
+        case "record":
+            document.onmousedown = e => {
+                chrome.runtime.sendMessage(
+                    { 
+                    status: "record",
+                    action: [e.clientX, e.clientY, e.timeStamp] 
+                    }
+                , response => {
+                    console.log(response)
+                })
+            }  
             console.log(message)
             console.log(sender)
             break;
-        case status = "play":
+        case "play":
             chrome.runtime.sendMessage(
                 { status: "play" }
                 , response => {
@@ -36,7 +41,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             console.log(message)
             console.log(sender)
             break;
-        case status = "stop":
+        case "stop":
             chrome.runtime.sendMessage(
                 { status: "stop" }
                 , response => {

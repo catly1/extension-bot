@@ -1,19 +1,23 @@
 window.test = {}
 let running = false;
+let recording = [];
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    switch (message) {
-        case status = "record":
-            sendResponse("Got from backround record")
+
+    
+    switch (message.status) {
+        case "record":
+            recording.push(message.action)
+            sendResponse(recording)
             console.log(message)
             console.log(sender)
             break;
-        case status = "play":
+        case "play":
             sendResponse("Got from backround play")
             console.log(message)
             console.log(sender)
             break;
-        case status = "stop":
+        case "stop":
             console.log(message)
             sendResponse("Got from backround stop")
             console.log(sender)
@@ -21,7 +25,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         default:
     }
 
-    sendResponse(message)
+
 })
 
 chrome.browserAction.onClicked.addListener((tab) => {
