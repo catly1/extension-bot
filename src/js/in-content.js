@@ -26,6 +26,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             handleRecoding();  
             break;
         case "play":
+            console.log(message.selected)
             chrome.runtime.sendMessage(
                 { status: "play" }
                 , response => {

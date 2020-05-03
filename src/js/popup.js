@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let btnStop = document.getElementById('stop-button');
         let lblStatus = document.getElementById('status-label');
         let recordList = document.getElementById('recordings');
+        let recordForm = document.getElementById("recordings-form");
         let deleteAll = document.getElementById('delete-all');
         let recordings = [];
         let selectedRecording = [];
@@ -17,10 +18,17 @@ document.addEventListener('DOMContentLoaded', () => {
             chrome.tabs.sendMessage(tabs[0].id, {status:"record"});
         }
 
-        btnStart.onclick = (element) => {
-            lblStatus.innerHTML = "Started";
+        // btnStart.onclick = (element) => {
+        //     lblStatus.innerHTML = "Started";
+            // chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            //     chrome.tabs.sendMessage(tabId, {status: "play", selected: selectedRecording});
+            // });
+        // }
+
+        recordForm.onsubmit = e => {
+            lblStatus.innerHTML = "playing"
             chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-                chrome.tabs.sendMessage(tabId, {status: "play", selected: selectedRecording});
+                chrome.tabs.sendMessage(tabId, { status: "play", selected: e });
             });
         }
 
@@ -35,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
             chrome.storage.local.remove("recordings");
         }
         
+        renderRecordings()
+        function renderRecordings() {
         chrome.storage.local.get("recordings", data => {
             let recordings = data.recordings
             recordings.forEach(recordingData => {
@@ -52,8 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
 
         })
-
-
+        }
 
         // const bg = chrome.extension.getBackgroundPage()
         // Object.keys(bg.test).forEach((url) => {
@@ -61,11 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
         //     div.textContent = `${url}: ${bg.test[url]}`
         //     document.body.appendChild(div)
         // })
+        function getStatus() {
+            chrome.storage.local.get("status", data => {
+                if (data.status == "recording") chrome.browserAction.setIcon({ path: '../red.png', tabId: tabId })
+            })
+        }
     })
 }, false)
-
-function getStatus(tabId) {
-    chrome.storage.local.get("status", data => {
-        if (data.status == "recording") chrome.browserAction.setIcon({ path: '../red.png', tabId: tabId })
-    })
-}
