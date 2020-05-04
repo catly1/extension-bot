@@ -26,12 +26,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             handleRecoding();  
             break;
         case "play":
-            console.log(message.selected)
-            chrome.runtime.sendMessage(
-                { status: "play" }
-                , response => {
-                    console.log(response)
-                })
+            chrome.storage.local.set({ "status": "playing", "playing": message.selected}, ()=>{
+                console.log(message.selected)
+                chrome.runtime.sendMessage(
+                    { status: "play" }
+                    , response => {
+                        console.log(response)
+                    })
+                handlePlay();
+            });
             break;
         case "stop":
             chrome.storage.local.set({ "status": "stopped" });
@@ -41,6 +44,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 
 })
+
+function handlePlay(){
+    chrome.storage.local.get("playing", ({playing})=>{
+        console.log(playing)
+        let newIdx = playing.idx + 1;
+        if (newIdx > (playing.steps.length - 1)) {
+            chrome.storage.local.set({ "status": "" });
+            chrome.storage.local.set({ "playing": "" });
+            console.log("finished")
+            return
+        }
+        let newRecordingObject = playing;
+        newRecordingObject.idx = newIdx;
+        chrome.storage.local.set({playing: newRecordingObject})
+        let step = playing.steps[playing.idx];
+        tap(step)
+    })
+}
 
 function handleStop(){
     document.onmousedown = e => { };
@@ -65,52 +86,43 @@ function handleRecoding(){
             })
     }  
 }
-// mainInterval()
-// setInterval(getStatus, 1500)
-// mainInterval();
 
 let i = 0
 
 
+// function mainInterval() {
 
-// const questMode = () => new Promise (resolve =>{
-//     console.log(i + 1);
-//     resolve();
-// })
+//     setTimeout(() => {
 
-function mainInterval() {
-    // console.log(status)
+//         switch (status) {
+//             case status = "record":
+//                 document.onmousedown = e => {
+//                     clicks.push([e.clientX, e.clientY, e.timeStamp]);
+//                     console.log(clicks);
+//                 }
+//                 break;
+//             case status = "play":
+//                 if (clicks.length > 0) {
+//                     let action = clicks.pop();
+//                     tap(action);
+//                 }
+//             case status = "stop":
+//                 break;
+//             default:
+//         }
 
-    setTimeout(() => {
-
-        switch (status) {
-            case status = "record":
-                document.onmousedown = e => {
-                    clicks.push([e.clientX, e.clientY, e.timeStamp]);
-                    console.log(clicks);
-                }
-                break;
-            case status = "play":
-                if (clicks.length > 0) {
-                    let action = clicks.pop();
-                    tap(action);
-                }
-            case status = "stop":
-                break;
-            default:
-        }
-
-        // console.log(i);
-        mainInterval();
-    }, 1000)
-}
+//         // console.log(i);
+//         mainInterval();
+//     }, 1000)
+// }
 
 
 function getStatus(){
     chrome.storage.local.get("status", data => {
         status = data.status;
         console.log(status)
-        if (status == "recording") handleRecoding()
+        if (status == "recording") handleRecoding();
+        if (status == "playing") handlePlay();
     })
 
     chrome.storage.local.get("recordings", data => {
@@ -130,6 +142,8 @@ function sleep(ms) {
 // action();
 
 function tap([x, y, timeStamp]) {
+    console.log(x,y,timeStamp)
+    sleep(timeStamp);
     let element = document.elementFromPoint(x,y)
 
     if (element){
@@ -143,6 +157,4 @@ function tap([x, y, timeStamp]) {
             element.dispatchEvent(evt2);
         }, Math.round(Math.random() * 42) + 38)
     }
-
-    sleep(timeStamp);
 }
