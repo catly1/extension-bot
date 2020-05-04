@@ -27,7 +27,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             break;
         case "play":
             chrome.storage.local.set({ "status": "playing", "playing": message.selected}, ()=>{
-                console.log(message.selected)
                 chrome.runtime.sendMessage(
                     { status: "play" }
                     , response => {
@@ -47,20 +46,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 function handlePlay(){
     chrome.storage.local.get("playing", ({playing})=>{
+        let oldIdx = playing.idx;
         let newIdx = playing.idx + 1;
-        if (newIdx > (playing.steps.length - 1)) {
+        if (oldIdx > (playing.steps.length - 1)) {
             chrome.storage.local.set({ "status": "" });
             chrome.storage.local.set({ "playing": "" });
             console.log("finished");
-            console.log(playing)
-            console.log(newIdx);
             return
         }
         let newRecordingObject = playing;
         newRecordingObject.idx = newIdx;
-        console.log(newRecordingObject);
         chrome.storage.local.set({playing: newRecordingObject})
-        let step = playing.steps[playing.idx];
+        let step = playing.steps[oldIdx];
+        console.log("steps length:" + playing.steps.length);
+        console.log(oldIdx)
+        console.log(step)
         tap(step)
     })
 }
@@ -144,20 +144,19 @@ function sleep(ms) {
 // action();
 
 function tap([x, y, timeStamp]) {
-    sleep(timeStamp);
-    let element = document.elementFromPoint(x,y)
-    console.log(x, y, timeStamp)
-    console.log(element)
-    if (element){
-        element.click();
-        // let evt1 = document.createEvent('MouseEvents');
-        // evt1.initMouseEvent('mousedown', true, false);
-        // let evt2 = document.createEvent('MouseEvents');
-        // evt2.initMouseEvent('mouseup', true, false);
+    sleep(timeStamp).then(()=>{
+        let element = document.elementFromPoint(x, y)
+        if (element) {
+            element.click();
+            // let evt1 = document.createEvent('MouseEvents');
+            // evt1.initMouseEvent('mousedown', true, false);
+            // let evt2 = document.createEvent('MouseEvents');
+            // evt2.initMouseEvent('mouseup', true, false);
 
-        // element.dispatchEvent(evt1);
-        // setTimeout(() => {
-        //     element.dispatchEvent(evt2);
-        // }, Math.round(Math.random() * 42) + 38)
-    }
+            // element.dispatchEvent(evt1);
+            // setTimeout(() => {
+            //     element.dispatchEvent(evt2);
+            // }, Math.round(Math.random() * 42) + 38)
+        }
+    });
 }
