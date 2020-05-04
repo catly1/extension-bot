@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let recordForm = document.getElementById("recordings-form");
         let deleteAll = document.getElementById('delete-all');
         let recordings = [];
-        let selectedRecording = [];
+        let selectedRecording = {};
 
         btnRecord.onclick = (element) => {
             lblStatus.innerHTML = "Record";
@@ -26,10 +26,19 @@ document.addEventListener('DOMContentLoaded', () => {
         // }
 
         recordForm.onsubmit = e => {
-            lblStatus.innerHTML = "playing"
-            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-                chrome.tabs.sendMessage(tabId, { status: "play", selected: e });
-            });
+            
+            let selectedElement = recordForm.querySelector('input[name=recording]:checked');
+            let selectedRecording;
+            if (selectedElement) {
+                selectedRecording = recordings.filter(recording => recording.date == selectedElement.id)[0];
+                lblStatus.innerHTML = "playing"
+                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                    chrome.tabs.sendMessage(tabId, { status: "play", selected: selectedRecording });
+                });
+            } else {
+                lblStatus.innerHTML = "nothing selected"
+            }
+
         }
 
         btnStop.onclick = (element) => {
@@ -46,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderRecordings()
         function renderRecordings() {
         chrome.storage.local.get("recordings", data => {
-            let recordings = data.recordings
+            recordings = data.recordings
             recordings.forEach(recordingData => {
                 let li = document.createElement("input");
                 li.setAttribute("type", "radio");
