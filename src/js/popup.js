@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteAll.onclick = (e) => {
             lblStatus.innerHTML = "deleting"
             chrome.storage.local.remove("recordings");
+
         }
         
         renderRecordings()
