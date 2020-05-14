@@ -18,13 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
             chrome.tabs.sendMessage(tabs[0].id, {status:"record"});
         }
 
-        // btnStart.onclick = (element) => {
-        //     lblStatus.innerHTML = "Started";
-            // chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            //     chrome.tabs.sendMessage(tabId, {status: "play", selected: selectedRecording});
-            // });
-        // }
-
         recordForm.onsubmit = e => {
             
             let selectedElement = recordForm.querySelector('input[name=recording]:checked');
@@ -52,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
             chrome.storage.local.remove("recordings",()=> recordList.innerHTML="");
 
         }
-        
         renderRecordings()
         function renderRecordings() {
         chrome.storage.local.get("recordings", data => {
@@ -74,12 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         }
 
-        // const bg = chrome.extension.getBackgroundPage()
-        // Object.keys(bg.test).forEach((url) => {
-        //     const div = document.createElement('div')
-        //     div.textContent = `${url}: ${bg.test[url]}`
-        //     document.body.appendChild(div)
-        // })
         function getStatus() {
             chrome.storage.local.get("status", data => {
                 if (data.status == "recording") chrome.browserAction.setIcon({ path: '../red.png', tabId: tabId })
